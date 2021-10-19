@@ -13,15 +13,14 @@ void DUMMY_CODE(Targs &&... /* unused */) {}
 using namespace std;
 
 ByteStream::ByteStream(const size_t cap) :
-    buffer{},
+    buffer(cap),
     capacity{cap},
     space_left{cap},
     read_index{0},
     write_index{0},
-    total_written_bytes{},
-    total_read_bytes{}
+    total_written_bytes{0},
+    total_read_bytes{0}
 {
-    buffer.reserve(capacity);
 }
 
 size_t ByteStream::write(const string &data) { 
@@ -72,6 +71,7 @@ std::string ByteStream::read(const size_t len) {
         bytes_wanted--;
         bytes_available--;
         total_read_bytes++;
+        space_left++;
     }
     return output;
 }
