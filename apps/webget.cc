@@ -7,22 +7,19 @@
 using namespace std;
 
 void get_URL(const string &host, const string &path) {
-    // Your code here.
-
-    // You will need to connect to the "http" service on
-    // the computer whose name is in the "host" string,
-    // then request the URL path given in the "path" string.
-
-    // Then you'll need to print out everything the server sends back,
-    // (not just one call to read() -- everything) until you reach
-    // the "eof" (end of file).
-
-    cerr << "Function called: get_URL(" << host << ", " << path << ").\n";
-    cerr << "Warning: get_URL() has not been implemented yet.\n";
+    const Address webserver_address(host, "http");
+    TCPSocket socket;
+    socket.connect(webserver_address);
+    socket.write("GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n");
+    while(!socket.eof()){
+        cout << socket.read();
+    }
+    socket.close();
 }
 
 int main(int argc, char *argv[]) {
     try {
+        
         if (argc <= 0) {
             abort();  // For sticklers: don't try to access argv[0] if argc <= 0.
         }
