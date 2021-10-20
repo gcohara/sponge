@@ -14,17 +14,21 @@
 class StreamReassembler {
   private:
     // Your code here -- add private members as necessary.
-    //!< Buffer to store unassembled bytes. Pair is of byte, index
+    //! Buffer to store unassembled bytes.
     std::vector<std::optional<uint8_t>> buffer;
-    size_t buffer_head_idx; //!< Head of the buffer. The output index of this element is output_index.
-    ByteStream output;  //!< The reassembled in-order byte stream
-    //!< The current index for the output bytestream. Any byte with index before this has been written.
+    //! Head of the buffer. The output index of this element is output_index.
+    size_t buffer_head_idx;
+    //! The reassembled in-order byte stream
+    ByteStream output;  
+    //! The current index for the output bytestream. Any byte with index before this has been written.
     size_t output_index;
+    //! The index of the final byte.
     size_t eof_idx;
-    size_t capacity;    //!< The maximum number of bytes
-    //!< If we were able to write to the output ByteStream, try and write some bytes from the buffer. Called within push_substring
+    //! The maximum number of bytes
+    size_t capacity;    
+    //! If we were able to write to the output ByteStream, try and write some bytes from the buffer. Called within push_substring
     size_t try_write_more_bytes();
-    //!< If we were unable to write to the output ByteStream, store what we have room for in the buffer. Called within push_substring
+    //! If we were unable to write to the output ByteStream, store what we have room for in the buffer. Called within push_substring
     void buffer_bytes(const std::string& data, const size_t index); 
 
   public:
