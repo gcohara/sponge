@@ -25,7 +25,8 @@ StreamReassembler::StreamReassembler(const size_t cap)
 //! possibly out-of-order, from the logical stream, and assembles any newly
 //! contiguous substrings and writes them into the output stream in order.
 void StreamReassembler::push_substring(const string &data, const size_t index, const bool eof) {
-    if (index <= output_index) {
+    // second condition discards strings we've already written the entirety of
+    if (index <= output_index && (output_index < (index + data.size()))) {
         // Take a substr to make sure we don't write the same bytes twice
         // We write what we can - any bytes we were unable to write would've taken us past
         // capacity, so we can silently discard them.
@@ -68,6 +69,12 @@ void StreamReassembler::buffer_bytes(const string &data, const size_t index) {
     }
 }
 
-size_t StreamReassembler::unassembled_bytes() const { return {}; }
+size_t StreamReassembler::unassembled_bytes() const {
+    size_t output_count{0};
+    for (auto x : buffer) {
+        output_count += x.has_value() ? 1 : 0;
+    }
+    return output_count;
+}
 
-bool StreamReassembler::empty() const { return {}; }
+bool StreamReassembler::empty() const { return unassembled_bytes() == 0; }
