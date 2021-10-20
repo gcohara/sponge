@@ -1,5 +1,9 @@
 #include "stream_reassembler.hh"
 
+#include <cstddef>
+#include <limits>
+#include <optional>
+
 // Dummy implementation of a stream reassembler.
 
 // For Lab 1, please replace with a real implementation that passes the
@@ -12,7 +16,10 @@ void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
-StreamReassembler::StreamReassembler(const size_t capacity) : _output(capacity), _capacity(capacity) {}
+size_t attempt_write_to_output(const string &data, const size_t index);
+
+StreamReassembler::StreamReassembler(const size_t cap)
+    : buffer(cap), buffer_head_idx{0}, output(cap), output_index{0}, eof_idx{numeric_limits<size_t>::max()}, capacity(cap)  {}
 
 //! \details This function accepts a substring (aka a segment) of bytes,
 //! possibly out-of-order, from the logical stream, and assembles any newly
@@ -60,9 +67,6 @@ void StreamReassembler::buffer_bytes(const string &data, const size_t index) {
     for (size_t i{0}; i < data.size() && i < max_bytes_to_buffer; i++) {
         buffer[(index + i) % capacity] = data[i];
     }
-=======
-    DUMMY_CODE(data, index, eof);
->>>>>>> parent of ba43a48... 3 tests remain
 }
 
 size_t StreamReassembler::unassembled_bytes() const {
