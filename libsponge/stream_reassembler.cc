@@ -32,7 +32,8 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
         // Take a substr to make sure we don't write the same bytes twice
         // We write what we can - any bytes we were unable to write would've taken us past
         // capacity, so we can silently discard them.
-        auto bytes_written {output.write(data.substr(output_index - index))};
+        auto bytes_to_write {data.substr(output_index - index)};
+        auto bytes_written {output.write(bytes_to_write)};
         output_index += bytes_written;
         // We may have written some bytes that are also in the buffer, so nullify those bytes
         for (size_t i{0}; i < bytes_written; i++) {
@@ -42,9 +43,9 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
         // Only try and write more bytes if the ByteStream has space
         // Note this check is unnecessary (the case is handled implicitly in try_write_more_bytes)
         // but is included here for the sake of explicitness
-        // if (bytes_written == data.size()) {
+        if (bytes_written == (bytes_to_write.size())) {
             try_write_more_bytes();
-        // }
+        }
     }
     else if (output_index < (index + data.size()))
     {
