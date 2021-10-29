@@ -1,4 +1,5 @@
 #include "tcp_receiver.hh"
+#include <cstdlib>
 
 // Dummy implementation of a TCP receiver
 
@@ -14,6 +15,10 @@ void TCPReceiver::segment_received(const TCPSegment &seg) {
     DUMMY_CODE(seg);
 }
 
-optional<WrappingInt32> TCPReceiver::ackno() const { return {}; }
+optional<WrappingInt32> TCPReceiver::ackno() const {
+    return initial_seqno.has_value() ?
+        make_optional(wrap(abs_seqno, initial_seqno.value()) + 1) :
+        nullopt;
+}
 
 size_t TCPReceiver::window_size() const { return {}; }
