@@ -7,6 +7,7 @@
 #include "wrapping_integers.hh"
 
 #include <bits/stdint-uintn.h>
+#include <cstdlib>
 #include <optional>
 
 //! \brief The "receiver" part of a TCP implementation.
@@ -29,7 +30,7 @@ class TCPReceiver {
     //!
     //! \param capacity the maximum number of bytes that the receiver will
     //!                 store in its buffers at any give time.
-    TCPReceiver(const size_t capacity) : reassembler(capacity), capacity(capacity) {}
+    TCPReceiver(const size_t cap) : reassembler(cap), capacity(cap), abs_seqno(0), initial_seqno(std::nullopt) {}
 
     //! \name Accessors to provide feedback to the remote TCPSender
     //!@{
