@@ -11,7 +11,7 @@ void get_URL(const string &host, const string &path) {
     TCPSocket socket;
     socket.connect(webserver_address);
     socket.write("GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\nConnection: close\r\n\r\n");
-    while(!socket.eof()){
+    while (!socket.eof()) {
         cout << socket.read();
     }
     socket.close();
@@ -19,7 +19,6 @@ void get_URL(const string &host, const string &path) {
 
 int main(int argc, char *argv[]) {
     try {
-        
         if (argc <= 0) {
             abort();  // For sticklers: don't try to access argv[0] if argc <= 0.
         }

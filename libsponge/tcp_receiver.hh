@@ -23,14 +23,15 @@ class TCPReceiver {
     size_t capacity;
     uint64_t abs_seqno;
     std::optional<WrappingInt32> initial_seqno;
-    
+    bool syn_received;
 
   public:
     //! \brief Construct a TCP receiver
     //!
     //! \param capacity the maximum number of bytes that the receiver will
     //!                 store in its buffers at any give time.
-    TCPReceiver(const size_t cap) : reassembler(cap), capacity(cap), abs_seqno(0), initial_seqno(std::nullopt) {}
+    TCPReceiver(const size_t cap)
+        : reassembler(cap), capacity(cap), abs_seqno(0), initial_seqno(std::nullopt), syn_received(false) {}
 
     //! \name Accessors to provide feedback to the remote TCPSender
     //!@{

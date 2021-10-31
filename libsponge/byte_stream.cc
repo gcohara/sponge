@@ -12,20 +12,18 @@ void DUMMY_CODE(Targs &&... /* unused */) {}
 
 using namespace std;
 
-ByteStream::ByteStream(const size_t cap) :
-    buffer(cap),
-    capacity{cap},
-    space_left{cap},
-    read_index{0},
-    write_index{0},
-    total_written_bytes{0},
-    total_read_bytes{0}
-{
-}
+ByteStream::ByteStream(const size_t cap)
+    : buffer(cap)
+    , capacity{cap}
+    , space_left{cap}
+    , read_index{0}
+    , write_index{0}
+    , total_written_bytes{0}
+    , total_read_bytes{0} {}
 
-size_t ByteStream::write(const string &data) { 
-    size_t bytes_written_count {0};
-    while(space_left && bytes_written_count < data.size()) {
+size_t ByteStream::write(const string &data) {
+    size_t bytes_written_count{0};
+    while (space_left && bytes_written_count < data.size()) {
         buffer[write_index++] = data[bytes_written_count++];
         write_index = write_index == capacity ? 0 : write_index;
         space_left--;
@@ -36,11 +34,11 @@ size_t ByteStream::write(const string &data) {
 
 //! \param[in] len bytes will be copied from the output side of the buffer
 string ByteStream::peek_output(const size_t len) const {
-    string output {};
-    auto bytes_available {capacity - space_left};
-    auto bytes_wanted {len};
-    auto read_index_copy {read_index};
-    while(bytes_wanted && bytes_available) {
+    string output{};
+    auto bytes_available{capacity - space_left};
+    auto bytes_wanted{len};
+    auto read_index_copy{read_index};
+    while (bytes_wanted && bytes_available) {
         output.push_back(buffer[read_index_copy++]);
         read_index_copy = read_index_copy == capacity ? 0 : read_index_copy;
         bytes_wanted--;
@@ -62,10 +60,10 @@ void ByteStream::pop_output(const size_t len) {
 //! \param[in] len bytes will be popped and returned
 //! \returns a string
 std::string ByteStream::read(const size_t len) {
-    string output {};
-    auto bytes_available {capacity - space_left};
-    auto bytes_wanted {len};
-    while(bytes_wanted && bytes_available) {
+    string output{};
+    auto bytes_available{capacity - space_left};
+    auto bytes_wanted{len};
+    while (bytes_wanted && bytes_available) {
         output.push_back(buffer[read_index++]);
         read_index = (read_index == capacity) ? 0 : read_index;
         bytes_wanted--;
@@ -76,7 +74,7 @@ std::string ByteStream::read(const size_t len) {
     return output;
 }
 
-void ByteStream::end_input() {_input_done = true;}
+void ByteStream::end_input() { _input_done = true; }
 
 bool ByteStream::input_ended() const { return _input_done; }
 
